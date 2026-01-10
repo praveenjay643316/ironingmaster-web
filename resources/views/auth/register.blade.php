@@ -7,7 +7,7 @@
     <div class="container">
         <div class="auth-container">
             <div class="auth-card">
-                <!-- Left Side - Welcome & Features -->
+                <!-- Left Side -->
                 <div class="auth-left">
                     <div class="auth-logo">
                         <img src="{{ asset('assets/images/logo/ironing_master_logo_white.png') }}" alt="Ironing Master">
@@ -60,65 +60,147 @@
                     <h1 class="auth-title">Create Your Account</h1>
                     <p class="auth-subtitle">Fill in your details to get started</p>
                     
-                    <form method="POST" action="#" id="registerForm">
+                    {{-- Error Messages --}}
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <ul class="mb-0 ps-3">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+                    
+                    <form method="POST" action="{{ route('register.submit') }}" id="registerForm">
                         @csrf
                         
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="auth-form-group">
-                                    <label class="auth-form-label" for="name">Full Name</label>
-                                    <input type="text" class="auth-form-control" id="name" name="name" placeholder="Enter your full name" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="auth-form-group">
-                                    <label class="auth-form-label" for="email">Email Address</label>
-                                    <input type="email" class="auth-form-control" id="email" name="email" placeholder="Enter your email" required>
+                                    <label class="auth-form-label" for="name">
+                                        Full Name <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" 
+                                           class="auth-form-control @error('name') is-invalid @enderror" 
+                                           id="name" 
+                                           name="name" 
+                                           value="{{ old('name') }}"
+                                           placeholder="Enter your full name" 
+                                           required
+                                           autofocus>
+                                    @error('name')
+                                        <div class="invalid-feedback d-block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
                         
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="auth-form-group">
-                                    <label class="auth-form-label" for="mobile">Mobile Number</label>
-                                    <input type="tel" class="auth-form-control" id="mobile" name="mobile" placeholder="Enter your mobile number" required>
+                                    <label class="auth-form-label" for="email">
+                                        Email Address <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="email" 
+                                           class="auth-form-control @error('email') is-invalid @enderror" 
+                                           id="email" 
+                                           name="email" 
+                                           value="{{ old('email') }}"
+                                           placeholder="Enter your email" 
+                                           required>
+                                    @error('email')
+                                        <div class="invalid-feedback d-block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
                                 <div class="auth-form-group">
-                                    <label class="auth-form-label" for="password">Password</label>
+                                    <label class="auth-form-label" for="phone">
+                                        Phone Number <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="tel" 
+                                           class="auth-form-control @error('phone') is-invalid @enderror" 
+                                           id="phone" 
+                                           name="phone" 
+                                           value="{{ old('phone') }}"
+                                           placeholder="Enter your phone number" 
+                                           required
+                                           pattern="[0-9]{10,15}"
+                                           minlength="10"
+                                           maxlength="15">
+                                    @error('phone')
+                                        <div class="invalid-feedback d-block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    <small class="form-text text-muted">
+                                        Enter 10-15 digit phone number
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="auth-form-group">
+                                    <label class="auth-form-label" for="password">
+                                        Password <span class="text-danger">*</span>
+                                    </label>
                                     <div class="password-wrapper">
-                                        <input type="password" class="auth-form-control" id="password" name="password" placeholder="Create a password" required>
+                                        <input type="password" 
+                                               class="auth-form-control @error('password') is-invalid @enderror" 
+                                               id="password" 
+                                               name="password" 
+                                               placeholder="Create a password (min 8 characters)" 
+                                               required
+                                               minlength="8">
                                         <button type="button" class="password-toggle" onclick="togglePassword('password')">
                                             <i class="far fa-eye"></i>
                                         </button>
                                     </div>
+                                    @error('password')
+                                        <div class="invalid-feedback d-block">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                    <small class="form-text text-muted">
+                                        Password must be at least 8 characters long
+                                    </small>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <div class="auth-form-group">
-                            <label class="auth-form-label" for="confirm_password">Confirm Password</label>
-                            <div class="password-wrapper">
-                                <input type="password" class="auth-form-control" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
-                                <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')">
-                                    <i class="far fa-eye"></i>
-                                </button>
                             </div>
                         </div>
                         
                         <div class="auth-form-group">
                             <div class="auth-form-check">
-                                <input type="checkbox" class="auth-form-check-input" id="terms" name="terms" required>
+                                <input type="checkbox" 
+                                       class="auth-form-check-input @error('terms') is-invalid @enderror" 
+                                       id="terms" 
+                                       name="terms" 
+                                       required>
                                 <label class="auth-form-check-label" for="terms">
-                                    I agree to the <a href="#" class="forgot-link">Terms of Service</a> and <a href="#" class="forgot-link">Privacy Policy</a>
+                                    I agree to the <a href="#" class="forgot-link">Terms of Service</a> and 
+                                    <a href="#" class="forgot-link">Privacy Policy</a>
+                                    <span class="text-danger">*</span>
                                 </label>
                             </div>
+                            @error('terms')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                         
-                        <button type="submit" class="auth-btn">
-                            <i class="fas fa-user-plus mr-2"></i> Create Account
+                        <button type="submit" class="auth-btn" id="registerBtn">
+                            <i class="fas fa-user-plus me-2"></i> Create Account
                         </button>
                         
                         <div class="auth-link mt-3">
@@ -132,86 +214,135 @@
 </section>
 @endsection
 
-@section('scripts')
-<script>
-    function togglePassword(fieldId) {
-        const passwordInput = document.getElementById(fieldId);
-        const toggleIcon = document.querySelector(`#${fieldId} + .password-toggle i`);
-        
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            toggleIcon.classList.remove('fa-eye');
-            toggleIcon.classList.add('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            toggleIcon.classList.remove('fa-eye-slash');
-            toggleIcon.classList.add('fa-eye');
-        }
+@push('styles')
+<style>
+    .alert {
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-bottom: 20px;
     }
     
-    // Form validation
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #dc3545;
+        color: #721c24;
+    }
+    
+    .alert ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+    
+    .alert ul li {
+        margin-bottom: 5px;
+    }
+    
+    .alert ul li:last-child {
+        margin-bottom: 0;
+    }
+    
+    .is-invalid {
+        border-color: #dc3545 !important;
+    }
+    
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+    
+    .text-danger {
+        color: #dc3545;
+    }
+    
+    .auth-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    
+    .form-text {
+        font-size: 13px;
+        margin-top: 5px;
+        display: block;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<script>
+function togglePassword(fieldId) {
+    const passwordInput = document.getElementById(fieldId);
+    const toggleIcon = passwordInput.nextElementSibling.querySelector('i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    }
+}
+
+// Form validation
+document.getElementById('registerForm').addEventListener('submit', function(e) {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const password = document.getElementById('password').value;
+    const terms = document.getElementById('terms').checked;
+    
+    let errors = [];
+    
+    // Name validation
+    if (name.length < 2) {
+        errors.push('Name must be at least 2 characters long');
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        errors.push('Please enter a valid email address');
+    }
+    
+    // Phone validation
+    const phoneRegex = /^[0-9]{10,15}$/;
+    if (!phoneRegex.test(phone)) {
+        errors.push('Please enter a valid 10-15 digit phone number');
+    }
+    
+    // Password validation
+    if (password.length < 8) {
+        errors.push('Password must be at least 8 characters long');
+    }
+    
+    // Terms validation
+    if (!terms) {
+        errors.push('You must agree to the Terms of Service and Privacy Policy');
+    }
+    
+    if (errors.length > 0) {
         e.preventDefault();
-        
-        // Get form values
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const mobile = document.getElementById('mobile').value.trim();
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm_password').value;
-        const terms = document.getElementById('terms').checked;
-        
-        // Validation
-        let isValid = true;
-        let errorMessage = '';
-        
-        // Name validation
-        if (name.length < 2) {
-            isValid = false;
-            errorMessage = 'Name must be at least 2 characters';
-        }
-        
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            isValid = false;
-            errorMessage = 'Please enter a valid email address';
-        }
-        
-        // Mobile validation
-        const mobileRegex = /^[0-9]{10}$/;
-        if (!mobileRegex.test(mobile)) {
-            isValid = false;
-            errorMessage = 'Please enter a valid 10-digit mobile number';
-        }
-        
-        // Password validation
-        if (password.length < 8) {
-            isValid = false;
-            errorMessage = 'Password must be at least 8 characters';
-        }
-        
-        // Confirm password validation
-        if (password !== confirmPassword) {
-            isValid = false;
-            errorMessage = 'Passwords do not match';
-        }
-        
-        // Terms validation
-        if (!terms) {
-            isValid = false;
-            errorMessage = 'You must agree to the terms and conditions';
-        }
-        
-        if (!isValid) {
-            alert(errorMessage);
-            return;
-        }
-        
-        // If validation passes
-        alert('Registration successful!');
-        // In real application, you would submit the form here
-        // this.submit();
+        alert('Please fix the following errors:\n\n' + errors.join('\n'));
+        return false;
+    }
+    
+    // Disable button and show loading
+    const button = document.getElementById('registerBtn');
+    button.disabled = true;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Creating Account...';
+});
+
+// Auto-dismiss alerts after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
     });
+});
 </script>
-@endsection
+@endpush

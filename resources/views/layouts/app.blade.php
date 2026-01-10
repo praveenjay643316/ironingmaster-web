@@ -58,6 +58,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/module-css/contact.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/module-css/team.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/module-css/testimonial.css') }}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template styles -->
     <link rel="stylesheet" href="{{ asset('assets/css/style2.css') }}" />
@@ -357,6 +358,53 @@
                 font-size: 28px;
             }
         }
+        /* ORANGE ONLY FOR USER BUTTON */
+.user-orange-btn {
+    background: #f36b3f;
+    color: #fff !important;
+    border-radius: 30px;
+    padding: 10px 22px;
+    font-weight: 600;
+}
+
+.user-orange-btn:hover {
+    background: #e45a2f;
+    color: #fff;
+}
+
+/* DROPDOWN WHITE */
+.user-dropdown {
+    border-radius: 18px;
+    padding: 12px;
+    min-width: 230px;
+}
+
+/* DROPDOWN ITEMS NORMAL */
+.user-dropdown .dropdown-item {
+    background: #fff;
+    color: #333;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+/* HOVER EFFECT */
+.user-dropdown .dropdown-item:hover {
+    background: #f36b3f;
+    color: #fff;
+}
+
+/* LOGOUT */
+.user-dropdown .text-danger {
+    color: #dc3545 !important;
+}
+
+.user-dropdown .text-danger:hover {
+    background: #ffe5e5;
+    color: #dc3545 !important;
+}
+
     </style>
     
     @stack('styles')
@@ -437,32 +485,69 @@
                                     <li>
                                         <a href="#">Contact</a>
                                     </li>
+                                    <li>
+    </li>
                                 </ul>
                             </div>
                             <div class="main-menu__right">
                                 <div class="main-menu__search-cart-box">
                                     <!-- Search and cart buttons can be added here -->
                                 </div>
-                                <div class="main-menu__btn-box">
-                                    @if(Request::is('login') || Request::is('register'))
-                                        @if(Request::is('login'))
-                                            <div class="main-menu__btn" style="margin-right: 10px;">
-                                                <a href="{{ route('register') }}"><span class="icon-user"></span> Register</a>
-                                            </div>
-                                        @else
-                                            <div class="main-menu__btn" style="margin-right: 10px;">
-                                                <a href="{{ route('login') }}"><span class="icon-user"></span> Login</a>
-                                            </div>
-                                        @endif
-                                    @else
-                                        <div class="main-menu__btn" style="margin-right: 10px;">
-                                            <a href="{{ route('login') }}"><span class="icon-user"></span> Login/Signup</a>
-                                        </div>
-                                    @endif
-                                    <div class="main-menu__btn">
-                                        <a href="#"><span class="icon-customer-support"></span> Book Schedule</a>
-                                    </div>
-                                </div>
+                               <div class="main-menu__btn-box">
+
+    @if(session()->has('user'))
+        <div class="dropdown">
+
+            <!-- ORANGE USER BUTTON -->
+            <a href="#"
+               class="main-menu__btn dropdown-toggle user-orange-btn"
+               data-bs-toggle="dropdown"
+               aria-expanded="false">
+                <span class="icon-customer-support"></span>
+                {{ session('user.name') }}
+            </a>
+
+            <!-- WHITE DROPDOWN -->
+            <ul class="dropdown-menu dropdown-menu-end user-dropdown">
+                <li>
+                    <a class="dropdown-item" href="{{ route('booking') }}">
+                        <i class="fa fa-shopping-cart me-2"></i> Cart
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('orders') }}">
+                        <i class="fa fa-box me-2"></i> Orders
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="{{ route('schedule-appointment') }}">
+                        <i class="fa fa-calendar-check me-2"></i> Book Schedule
+                    </a>
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="dropdown-item text-danger">
+                            <i class="fa fa-sign-out-alt me-2"></i> Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+
+        </div>
+    @else
+        <div class="main-menu__btn">
+            <a href="{{ route('login') }}">
+                <span class="icon-customer-support"></span> Login / Register
+            </a>
+        </div>
+    @endif
+
+</div>
+
                             </div>
                         </div>
                     </div>

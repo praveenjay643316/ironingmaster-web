@@ -17,9 +17,15 @@ return [
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
-
+    'admin_api' => [
+        'url' => env('ADMIN_API_URL'),
+    ],
     'resend' => [
         'key' => env('RESEND_API_KEY'),
+    ],
+    'razorpay' => [
+        'key' => env('RAZORPAY_KEY'),
+        'secret' => env('RAZORPAY_SECRET'),
     ],
 
     'ses' => [
